@@ -4,10 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.Flow
 
 class FlowDemoViewModel(useCase: UseCase) : ViewModel() {
 
     val userLiveData: LiveData<User> = useCase.userFlow.asLiveData()
+
+    val userFlow: Flow<User> = useCase.userFlow
 
     companion object {
         val FACTORY = singleArgumentViewModelFactory(::FlowDemoViewModel)

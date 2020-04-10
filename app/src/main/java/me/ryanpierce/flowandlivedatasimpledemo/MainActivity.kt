@@ -27,10 +27,15 @@ class MainActivity : AppCompatActivity() {
         val adapter = UserListAdapter()
         listView.adapter = adapter
 
-        // Choose whichever reactive mechanism you'd like for observing the stream of users.
+        // Choose whichever reactive mechanism you'd like to observe
+        //   the stream of users. They all accomplish the same thing, that
+        //   is, reactively observe a stream of users and add each user to
+        //   a ListView.
         when (ReactWith.LIVE_DATA) {
+
             ReactWith.LIVE_DATA -> {
 
+                // Use Android's LiveData to observe the flow of users.
                 viewModel.userLiveData.observe(this, Observer { user ->
                     adapter.addItem(user)
                 })
@@ -38,8 +43,9 @@ class MainActivity : AppCompatActivity() {
 
             ReactWith.COLLECT -> {
 
+                // Use Kotlin's Flow to observe the flow of users.
                 lifecycleScope.launchWhenCreated {
-                    useCase.userFlow.collect { user ->
+                    viewModel.userFlow.collect { user ->
                         adapter.addItem(user)
                     }
                 }
@@ -47,7 +53,9 @@ class MainActivity : AppCompatActivity() {
 
             ReactWith.LAUNCH_IN -> {
 
-                useCase.userFlow
+                // Same as .collect{} but with syntactic sugar,
+                //   specifically, fewer nested braces.
+                viewModel.userFlow
                     .onEach { adapter.addItem(it) }
                     .launchIn(lifecycleScope)
             }
