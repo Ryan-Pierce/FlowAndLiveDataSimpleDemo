@@ -9,7 +9,7 @@ import me.ryanpierce.flowandlivedatasimpledemo.databinding.CustomListItemBinding
 
 class UserListAdapter : ListAdapter<User, RecyclerView.ViewHolder>(UserDiffCallback()) {
 
-    val list:MutableList<User> = mutableListOf()
+    private val list:MutableList<User> = mutableListOf()
 
     fun addItem(user: User) {
         list.add(user)
