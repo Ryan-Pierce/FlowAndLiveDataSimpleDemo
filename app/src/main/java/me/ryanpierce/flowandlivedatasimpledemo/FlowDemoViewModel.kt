@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 class FlowDemoViewModel(useCase: UseCase) : ViewModel() {
 
-    val userLiveData: LiveData<User> = useCase.userFlow.asLiveData()
+    val userLiveData: LiveData<List<User>> = useCase.userFlow.asLiveData()
 
-    val userFlow: Flow<User> = useCase.userFlow
+    val userFlow: Flow<List<User>> = useCase.userFlow
 
     companion object {
         val FACTORY = singleArgumentViewModelFactory(::FlowDemoViewModel)

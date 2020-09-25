@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,27 +37,27 @@ class MainActivity : AppCompatActivity() {
             ReactWith.LIVE_DATA -> {
 
                 // Use Android's LiveData to observe the flow of users.
-                viewModel.userLiveData.observe(this, Observer { user ->
-                    adapter.addItem(user)
+                viewModel.userLiveData.observe(this, Observer { users ->
+                    adapter.submitList(users)
                 })
             }
 
             ReactWith.COLLECT -> {
 
                 // Use Kotlin's Flow to observe the flow of users.
-                lifecycleScope.launchWhenCreated {
-                    viewModel.userFlow.collect { user ->
-                        adapter.addItem(user)
+                lifecycleScope.launch {
+                    viewModel.userFlow.collect { users ->
+                        adapter.submitList(users)
                     }
                 }
             }
 
             ReactWith.LAUNCH_IN -> {
 
-                // Same as .collect{} but with syntactic sugar,
-                //   specifically, fewer nested braces.
+                // Same as .collect {} but with
+                //   fewer nested braces.
                 viewModel.userFlow
-                    .onEach { adapter.addItem(it) }
+                    .onEach { adapter.submitList(it) }
                     .launchIn(lifecycleScope)
             }
         }
@@ -65,22 +66,4 @@ class MainActivity : AppCompatActivity() {
     enum class ReactWith {
         LIVE_DATA, COLLECT, LAUNCH_IN
     }
-
-    /*fun puttingCodeHereToSaveItInTheGitHistory() {
-        val liveData = liveData<Int> {
-            delay(5000)
-            emit(1)
-            delay(5000)
-            emit(2)
-        }
-        liveData.observe(this, Observer { user ->
-            Toast.makeText(this, user.toString(), Toast.LENGTH_SHORT).show()
-        })
-        lifecycleScope.launch {
-            delay(15000)
-            liveData.observe(this@MainActivity, Observer { user ->
-                Toast.makeText(this@MainActivity, user.toString(), Toast.LENGTH_SHORT).show()
-            })
-        }
-    }*/
 }
