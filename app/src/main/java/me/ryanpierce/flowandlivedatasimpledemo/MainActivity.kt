@@ -65,4 +65,22 @@ class MainActivity : AppCompatActivity() {
     enum class ReactWith {
         LIVE_DATA, COLLECT, LAUNCH_IN
     }
+
+    /*fun puttingCodeHereToSaveItInTheGitHistory() {
+        val liveData = liveData<Int> {
+            delay(5000)
+            emit(1)
+            delay(5000)
+            emit(2)
+        }
+        liveData.observe(this, Observer { user ->
+            Toast.makeText(this, user.toString(), Toast.LENGTH_SHORT).show()
+        })
+        lifecycleScope.launch {
+            delay(15000)
+            liveData.observe(this@MainActivity, Observer { user ->
+                Toast.makeText(this@MainActivity, user.toString(), Toast.LENGTH_SHORT).show()
+            })
+        }
+    }*/
 }
